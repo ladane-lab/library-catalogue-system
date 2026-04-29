@@ -1,5 +1,5 @@
 <?php
-include 'conn.php';
+include '../includes/db.php';
 
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
 if ($limit < 1) $limit = 10;
@@ -31,7 +31,7 @@ function getPaginationUrl($pageNum, $limit) {
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     
-            <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="home.php">
                 <h6 class="m-0"><b style="color: white;">WELCOME TO LIBRARY <span style="color: rgb(236, 134, 17)">ZONE</span></b></h6>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -42,7 +42,7 @@ function getPaginationUrl($pageNum, $limit) {
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto font-weight-bold mr-4">
                     <li class="nav-item">
-                        <a class="nav-link text-white px-3" href="index.php">Home</a>
+                        <a class="nav-link text-white px-3" href="home.php">Home</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link text-white px-3" href="student.php">Student</a>

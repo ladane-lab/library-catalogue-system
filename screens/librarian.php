@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'conn.php';
+include '../includes/db.php';
 
 if (!isset($_SESSION['username'])) {
     header("Location: sample.php");
@@ -26,40 +26,7 @@ if (!isset($_SESSION['username'])) {
 </head>
 
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <a class="navbar-brand" href="librarian.php">
-            <h6 class="m-0"><b style="color: white;">WELCOME TO LIBRARY <span style="color: rgb(236, 134, 17)">ZONE</span></b></h6>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link text-white font-weight-bold px-3" href="librarian.php">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link text-white font-weight-bold px-3" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link text-white font-weight-bold px-3" href="student.php">Student</a></li>
-                <li class="nav-item"><a class="nav-link text-white font-weight-bold px-3" href="faculty.php">Faculty</a></li>
-                <li class="nav-item"><a class="nav-link text-white font-weight-bold px-3" href="sample.php">Librarian</a></li>
-                <li class="nav-item"><a class="nav-link text-white font-weight-bold px-3" href="admin.php">Admin</a></li>
-            </ul>
-            </ul>
-
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-user-circle"></i> Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="change_password.php">Change Password</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-danger" href="logout.php">Logout</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <?php include '../includes/navbar.php'; ?>
     
     <div class="container-fluid mt-4">
         
@@ -151,7 +118,7 @@ if (!isset($_SESSION['username'])) {
                         <div class="bg-light p-3 rounded border">
                             <h6 class="font-weight-bold"><i class="fas fa-file-excel text-success"></i> Bulk Import via Excel</h6>
                             <p class="text-muted small mb-3">Download the template, fill it out, and upload the CSV to add multiple books at once.</p>
-                            <form action="import_books.php" method="post" enctype="multipart/form-data" class="d-flex align-items-center">
+                            <form action="../scripts/import_books.php" method="post" enctype="multipart/form-data" class="d-flex align-items-center">
                                 <div class="custom-file mr-2">
                                     <input type="file" name="file" class="custom-file-input" id="customFile" accept=".csv" required>
                                     <label class="custom-file-label" for="customFile">Choose CSV file</label>
@@ -161,7 +128,7 @@ if (!isset($_SESSION['username'])) {
                                 </button>
                             </form>
                             <div class="mt-2">
-                                <a href="export_books_excel.php" class="text-success font-weight-bold small"><i class="fas fa-download"></i> Download CSV Template</a>
+                                <a href="../exports/export_books_excel.php" class="text-success font-weight-bold small"><i class="fas fa-download"></i> Download CSV Template</a>
                             </div>
                         </div>
                     </div>
@@ -177,7 +144,7 @@ if (!isset($_SESSION['username'])) {
                     <div class="card-body bg-white rounded-bottom">
                         <p class="text-muted mb-4" style="font-size: 0.95rem;">Use these controls to send the survey of book related to the course work like which books required for current syllabus. Proceed with caution.</p>
                         
-                        <a href="filldata.php" class="btn btn-outline-info btn-block font-weight-bold mb-3 py-2" style="border-width: 2px;">
+                        <a href="../scripts/filldata.php" class="btn btn-outline-info btn-block font-weight-bold mb-3 py-2" style="border-width: 2px;">
                             <i class="fas fa-upload"></i> Send Data To Staff
                         </a>
                         
@@ -192,7 +159,7 @@ if (!isset($_SESSION['username'])) {
         <script>
             function confirmDelete() {
                 if (confirm("WARNING: Are you sure you want to completely clear the staff table data? This cannot be undone.")) {
-                    window.location = "deletetable.php";
+                    window.location = "../scripts/deletetable.php";
                 }
             }
         </script>
@@ -240,7 +207,7 @@ if (!isset($_SESSION['username'])) {
                         </thead>
                         <tbody id="books-data-tbody">
     <?php
-                                include 'conn.php';
+                                include '../includes/db.php';
 
                                 // Pagination and Search logic
                                 $limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? (int)$_GET['limit'] : 5;
@@ -277,10 +244,10 @@ if (!isset($_SESSION['username'])) {
                                             <td class="align-middle"> <?php echo htmlspecialchars($res['class']); ?> </td>
                                             <td class="align-middle"> <?php echo htmlspecialchars($res['sem']); ?> </td>
                                             <td class="align-middle"> 
-                                                <a href="delete.php?id=<?php echo $res['id']; ?>" class="btn btn-outline-danger btn-sm font-weight-bold shadow-sm">Delete</a> 
+                                                <a href="../scripts/delete.php?id=<?php echo $res['id']; ?>" class="btn btn-outline-danger btn-sm font-weight-bold shadow-sm">Delete</a> 
                                             </td>
                                             <td class="align-middle"> 
-                                                <a href="update.php?id=<?php echo $res['id']; ?>" class="btn btn-outline-primary btn-sm font-weight-bold shadow-sm">Update</a> 
+                                                <a href="../scripts/update.php?id=<?php echo $res['id']; ?>" class="btn btn-outline-primary btn-sm font-weight-bold shadow-sm">Update</a> 
                                             </td>
                                         </tr>
                             <?php
@@ -432,10 +399,10 @@ if (!isset($_SESSION['username'])) {
                                     <td class="align-middle"><?php echo htmlspecialchars($res3['qty']); ?></td>
                                     <td class="align-middle"><?php echo htmlspecialchars($res3['yop']); ?></td>
                                     <td class="align-middle">
-                                        <a href="update_staff_book.php?id=<?php echo $res3['id']; ?>" class="btn btn-outline-primary btn-sm px-3 shadow-sm font-weight-bold">Update</a>
+                                        <a href="../scripts/update_staff_book.php?id=<?php echo $res3['id']; ?>" class="btn btn-outline-primary btn-sm px-3 shadow-sm font-weight-bold">Update</a>
                                     </td>
                                     <td class="align-middle">
-                                        <a href="delete_staff_book.php?id=<?php echo $res3['id']; ?>" onclick="return confirm('Are you sure you want to delete this staff update?')" class="btn btn-outline-danger btn-sm px-3 shadow-sm font-weight-bold">Delete</a>
+                                        <a href="../scripts/delete_staff_book.php?id=<?php echo $res3['id']; ?>" onclick="return confirm('Are you sure you want to delete this staff update?')" class="btn btn-outline-danger btn-sm px-3 shadow-sm font-weight-bold">Delete</a>
                                     </td>
                                 </tr>
                                 <?php

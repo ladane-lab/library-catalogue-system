@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'conn.php';
+include '../includes/db.php';
 
 // Enforce login
 if (!isset($_SESSION['username'])) {
@@ -22,7 +22,7 @@ if(isset($_POST['submit'])){
     $result = mysqli_query($con, $sql);
     
     if($result){
-        header('location:librarian.php');
+        header('location:../screens/librarian.php');
         exit();
     } else {
         die(mysqli_error($con));

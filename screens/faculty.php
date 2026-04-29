@@ -1,19 +1,19 @@
 <?php
 session_start();
-include 'conn.php';
+include '../includes/db.php';
 
 if(isset($_POST['username'])){
   $user = $_POST['username'];
   $password = $_POST['password'];
 
-  $sql=" SELECT * FROM `loginform` WHERE user='".$user."' AND  password='".$password."' AND role='librarian' limit 1 ";
+  $sql=" SELECT * FROM `loginform` WHERE user='".$user."' AND  password='".$password."' AND role='faculty' limit 1 ";
   
   $result=mysqli_query($con,$sql);
   
   if(mysqli_num_rows($result)==1){
     $_SESSION['username'] = $user;
-    $_SESSION['role'] = 'librarian';
-    header('location:librarian.php');
+    $_SESSION['role'] = 'faculty';
+    header('location:staff.php');
     exit();
 
   }
@@ -34,12 +34,12 @@ if(isset($_POST['username'])){
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <title>Hello, world!</title>
   </head>
   <body>
     <div class="header">
-    <?php include 'navbar.php'; ?>
+    <?php include '../includes/navbar.php'; ?>
 <section class="header">
   <div class="register-wrapper">
       <div class="register-block">
@@ -52,7 +52,7 @@ if(isset($_POST['username'])){
           <input type="password" name="password" placeholder=" Enter  Your Password" />
           <input type="submit" name="submit" value="Log in" />
           <p style="text-align: center; margin-top: 20px; font-size: 14px;">
-              <a href="librarian_signup.php" style="color: #666; font-size: 14px; padding-top: 0; text-shadow: none; font-family: Arial, sans-serif;">New Librarian? Sign Up here</a>
+              <a href="faculty_signup.php" style="color: #666; font-size: 14px; padding-top: 0; text-shadow: none; font-family: Arial, sans-serif;">New Faculty? Sign Up here</a>
           </p>
         </form>
 

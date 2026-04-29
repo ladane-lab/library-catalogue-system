@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'conn.php';
+include '../includes/db.php';
 
 // We now use the persistent session selection instead of just the POSTed checkboxes
 if(isset($_SESSION['selected_books']) && !empty($_SESSION['selected_books'])){
@@ -47,6 +47,6 @@ if(isset($_SESSION['selected_books']) && !empty($_SESSION['selected_books'])){
     $_SESSION['status'] = "Please select at least one book to update.";
 }
 
-header('location:staff.php');
+header('location:../screens/staff.php');
 exit();
 ?>

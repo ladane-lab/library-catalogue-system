@@ -1,5 +1,5 @@
 <?php
-include 'conn.php';
+include '../includes/db.php';
 
 if(isset($_POST['submit'])){
     $isbn = $_POST['isbn'];

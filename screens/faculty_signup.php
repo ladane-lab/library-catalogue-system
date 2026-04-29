@@ -1,5 +1,5 @@
 <?php
-include 'conn.php';
+include '../includes/db.php';
 
 $error = '';
 $success = '';
@@ -19,7 +19,7 @@ if(isset($_POST['submit'])){
           $error = "Username already exists. Please choose another.";
       } else {
           // Insert new user to pending
-          $insert_sql = "INSERT INTO `pending_users` (user, password, role) VALUES ('$user', '$password', 'librarian')";
+          $insert_sql = "INSERT INTO `pending_users` (user, password, role) VALUES ('$user', '$password', 'faculty')";
           if(mysqli_query($con, $insert_sql)){
               $success = "Registration successful! Please wait for Admin approval before logging in.";
           } else {
@@ -40,16 +40,16 @@ if(isset($_POST['submit'])){
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <title>Librarian Sign Up</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <title>Faculty Sign Up</title>
   </head>
   <body>
     <div class="header">
-    <?php include 'navbar.php'; ?>
+    <?php include '../includes/navbar.php'; ?>
 <section class="header">
   <div class="register-wrapper">
       <div class="register-block">
-        <h3 class="register-title" style="font-size: 20px;">Librarian Registration</h3>
+        <h3 class="register-title" style="font-size: 20px;">Faculty Registration</h3>
 
         <?php if($error != ''): ?>
             <div class="alert alert-danger p-2 mb-3" style="font-size: 14px;"><?php echo $error; ?></div>
@@ -59,17 +59,17 @@ if(isset($_POST['submit'])){
             <div class="alert alert-success p-2 mb-3" style="font-size: 14px;">
                 <?php echo $success; ?>
                 <br>
-                <a href="sample.php" style="font-size: 14px; color: #155724; text-shadow: none; padding-top: 5px; display: inline-block;"><strong>Click here to Login</strong></a>
+                <a href="faculty.php" style="font-size: 14px; color: #155724; text-shadow: none; padding-top: 5px; display: inline-block;"><strong>Click here to Login</strong></a>
             </div>
         <?php endif; ?>
 
-        <form method="post" action="librarian_signup.php">
+        <form method="post" action="faculty_signup.php">
           <input type="text" name="username" placeholder="Choose a Username" required />
           <input type="password" name="password" placeholder="Choose a Password" required />
           <input type="submit" name="submit" value="Sign Up" />
           
           <p style="text-align: center; margin-top: 20px; font-size: 14px;">
-              <a href="sample.php" style="color: #666; font-size: 14px; padding-top: 0; text-shadow: none; font-family: Arial, sans-serif;">Already registered? Login here</a>
+              <a href="faculty.php" style="color: #666; font-size: 14px; padding-top: 0; text-shadow: none; font-family: Arial, sans-serif;">Already registered? Login here</a>
           </p>
         </form>
 

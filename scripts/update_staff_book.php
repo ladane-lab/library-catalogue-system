@@ -1,9 +1,9 @@
 <?php
 session_start();
-include 'conn.php';
+include '../includes/db.php';
 
 if (!isset($_SESSION['username'])) {
-    header("Location: sample.php");
+    header("Location: ../sample.php");
     exit();
 }
 
@@ -25,7 +25,7 @@ if (isset($_POST['submit'])) {
     $update_query = "UPDATE books SET isbn='$isbn', author='$author', title='$title', edn='$edn', price='$price', edition='$edition', qty='$qty', yop='$yop' WHERE id='$id'";
     
     if (mysqli_query($con, $update_query)) {
-        header("Location: librarian.php?msg=Staff record updated successfully");
+        header("Location: ../screens/librarian.php?msg=Staff record updated successfully");
         exit();
     }
 }
@@ -55,7 +55,7 @@ if (isset($_POST['submit'])) {
                     <div class="card-header bg-primary text-white p-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <h4 class="mb-0"><i class="fas fa-edit mr-2"></i> Update Staff Submission</h4>
-                            <a href="librarian.php" class="btn btn-light btn-sm font-weight-bold shadow-sm">
+                            <a href="../screens/librarian.php" class="btn btn-light btn-sm font-weight-bold shadow-sm">
                                 <i class="fas fa-arrow-left"></i> Back
                             </a>
                         </div>

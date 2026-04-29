@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'conn.php';
+include '../includes/db.php';
 
 if (!isset($_SESSION['username'])) {
     header("Location: faculty.php");
@@ -25,40 +25,7 @@ if (!isset($_SESSION['username'])) {
     <title>Staff Dashboard - Library Zone</title>
 </head>
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <a class="navbar-brand" href="staff.php">
-            <h6 class="m-0"><b style="color: white;">WELCOME TO LIBRARY <span style="color: rgb(236, 134, 17)">ZONE</span></b></h6>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link text-white font-weight-bold px-3" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link text-white font-weight-bold px-3" href="student.php">Student</a></li>
-                <li class="nav-item"><a class="nav-link text-white font-weight-bold px-3" href="faculty.php">Faculty</a></li>
-                <li class="nav-item"><a class="nav-link text-white font-weight-bold px-3" href="sample.php">Librarian</a></li>
-                <li class="nav-item"><a class="nav-link text-white font-weight-bold px-3" href="admin.php">Admin</a></li>
-            </ul>
-            
-            </ul>
-
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-user-circle"></i> Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="change_password.php">Change Password</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-danger" href="logout.php">Logout</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <?php include '../includes/navbar.php'; ?>
     
     <div class="container-fluid mt-4">
         <!-- Books List Section -->
@@ -104,7 +71,7 @@ if (!isset($_SESSION['username'])) {
                         unset($_SESSION['status']);
                     }
                 ?>
-                <form method="post" action="save.php" id="updateForm">
+                <form method="post" action="../scripts/save.php" id="updateForm">
                     <div class="table-responsive">
                         <table class="table table-striped table-hover table-bordered mb-0">
                             <thead class="thead-light text-center">
@@ -321,7 +288,7 @@ if (!isset($_SESSION['username'])) {
                 formData.append('id', id);
                 formData.append('action', action);
                 
-                fetch('manage_selection.php', {
+                fetch('../modules/manage_selection.php', {
                     method: 'POST',
                     body: formData
                 })

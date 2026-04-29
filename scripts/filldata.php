@@ -1,9 +1,9 @@
 <?php
 session_start();
-include 'conn.php';
+include '../includes/db.php';
 
 if (!isset($_SESSION['username'])) {
-    header("Location: sample.php");
+    header("Location: ../sample.php");
     exit();
 }
 ?>
@@ -26,7 +26,7 @@ if (!isset($_SESSION['username'])) {
 
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <a class="navbar-brand" href="librarian.php">
+        <a class="navbar-brand" href="../librarian.php">
             <h6 class="m-0"><b style="color: white;">WELCOME TO LIBRARY <span style="color: rgb(236, 134, 17)">ZONE</span></b></h6>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -37,7 +37,7 @@ if (!isset($_SESSION['username'])) {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link text-white font-weight-bold" href="librarian.php">Dashboard</a>
+                    <a class="nav-link text-white font-weight-bold" href="../librarian.php">Dashboard</a>
                 </li>
             </ul>
 
@@ -47,9 +47,9 @@ if (!isset($_SESSION['username'])) {
                         <i class="fas fa-user-circle"></i> Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="change_password.php">Change Password</a>
+                        <a class="dropdown-item" href="../change_password.php">Change Password</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-danger" href="logout.php">Logout</a>
+                        <a class="dropdown-item text-danger" href="../logout.php">Logout</a>
                     </div>
                 </li>
             </ul>
@@ -61,7 +61,7 @@ if (!isset($_SESSION['username'])) {
             <div class="col-lg-8">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2><i class="fas fa-paper-plane text-primary"></i> Send Data To Staff</h2>
-                    <a href="export_excel.php" class="btn btn-success font-weight-bold shadow-sm">
+                    <a href="../exports/export_excel.php" class="btn btn-success font-weight-bold shadow-sm">
                         <i class="fas fa-file-excel"></i> Export Table to Excel
                     </a>
                 </div>
@@ -124,7 +124,7 @@ if (!isset($_SESSION['username'])) {
                 </div>
                 
                 <div class="mt-4 text-center">
-                    <a href="librarian.php" class="text-muted"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+                    <a href="../librarian.php" class="text-muted"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
                 </div>
             </div>
         </div>

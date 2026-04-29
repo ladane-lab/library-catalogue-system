@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'conn.php';
+include '../includes/db.php';
 
 if (!isset($_SESSION['username'])) {
     header("Location: index.php");
@@ -62,12 +62,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body class="bg-light">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <a class="navbar-brand" href="<?php echo ($role === 'faculty') ? 'staff.php' : (($role === 'librarian') ? 'librarian.php' : 'index.php'); ?>">
+        <a class="navbar-brand" href="<?php echo ($role === 'faculty') ? 'staff.php' : (($role === 'librarian') ? 'librarian.php' : 'home.php'); ?>">
             <h6 class="m-0"><b style="color: white;">WELCOME TO LIBRARY <span style="color: rgb(236, 134, 17)">ZONE</span></b></h6>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link text-white font-weight-bold" href="<?php echo ($role === 'faculty') ? 'staff.php' : (($role === 'librarian') ? 'librarian.php' : 'index.php'); ?>">
+                    <a class="nav-link text-white font-weight-bold" href="<?php echo ($role === 'faculty') ? 'staff.php' : (($role === 'librarian') ? 'librarian.php' : 'home.php'); ?>">
                         <i class="fas fa-arrow-left"></i> Back to Dashboard
                     </a>
                 </li>
@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="dropdown-menu dropdown-menu-right">
                         <a class="dropdown-item" href="change_password.php">Change Password</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-danger" href="logout.php">Logout</a>
+                        <a class="dropdown-item text-danger" href="../scripts/logout.php">Logout</a>
                     </div>
                 </li>
             </ul>

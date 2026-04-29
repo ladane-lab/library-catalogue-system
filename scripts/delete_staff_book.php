@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'conn.php';
+include '../includes/db.php';
 
 if (!isset($_SESSION['username'])) {
     header("Location: sample.php");
@@ -13,11 +13,11 @@ if (isset($_GET['id'])) {
     $query = "DELETE FROM books WHERE id = '$id'";
     
     if (mysqli_query($con, $query)) {
-        header("Location: librarian.php?msg=Staff record deleted successfully");
+        header("Location: ../screens/librarian.php?msg=Staff record deleted successfully");
     } else {
-        header("Location: librarian.php?msg=Error deleting record");
+        header("Location: ../screens/librarian.php?msg=Error deleting record");
     }
 } else {
-    header("Location: librarian.php");
+    header("Location: ../screens/librarian.php");
 }
 ?>

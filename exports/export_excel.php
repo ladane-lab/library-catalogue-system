@@ -1,10 +1,10 @@
 <?php
 session_start();
-include 'conn.php';
+include '../includes/db.php';
 
 // Enforce login
 if (!isset($_SESSION['username'])) {
-    header("Location: sample.php");
+    header("Location: ../sample.php");
     exit();
 }
 
