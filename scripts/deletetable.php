@@ -7,6 +7,6 @@ $q = "   DELETE FROM `new`";
 
 mysqli_query($con,$q);
 
-header('location:../librarian.php');
+    header('location:../screens/librarian.php');
 
 ?>

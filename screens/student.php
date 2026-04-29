@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../includes/db.php';
 
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
@@ -26,44 +27,16 @@ function getPaginationUrl($pageNum, $limit) {
    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>displayt</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <title>Student Catalog - Library Zone</title>
 </head>
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-    
-            <a class="navbar-brand" href="home.php">
-                <h6 class="m-0"><b style="color: white;">WELCOME TO LIBRARY <span style="color: rgb(236, 134, 17)">ZONE</span></b></h6>
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ml-auto font-weight-bold mr-4">
-                    <li class="nav-item">
-                        <a class="nav-link text-white px-3" href="home.php">Home</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link text-white px-3" href="student.php">Student</a>
-                    </li>
-
-                </ul>
-                <form class="form-inline my-2 my-lg-0" method="get" action="student.php">
-                    <input type="hidden" name="limit" value="<?php echo htmlspecialchars($limit); ?>">
-                    <div class="input-group">
-                        <input class="form-control" id="searchTxt" name="search" type="text" placeholder="Quick Search..."
-                            aria-label="Search" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                        <div class="input-group-append">
-                            <button class="btn btn-warning font-weight-bold text-dark" type="submit" name="submit">Search</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-       
-    </nav>
+    <?php include '../includes/navbar.php'; ?>
 
     <div class="container mt-5">
+        <!-- Advanced Filter (Fully Restored) -->
         <div class="card shadow-sm border-0 rounded-lg mb-5">
             <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">🔍 Advanced Filter</h4>
@@ -85,7 +58,7 @@ function getPaginationUrl($pageNum, $limit) {
                 </form>
             </div>
             <div class="card-body bg-light p-4">
-                <form id="libraryForm" method="get" action="student.php" novalidate>
+                <form id="libraryForm" class="ajax-filter-form" method="get" action="student.php" novalidate>
                     <input type="hidden" name="limit" value="<?php echo htmlspecialchars($limit); ?>">
                     <div class="row">
                         <div class="col-md-6">
@@ -159,163 +132,95 @@ function getPaginationUrl($pageNum, $limit) {
                 </form>
             </div>
         </div>
-        
-        <?php if(isset($_GET['sbmt'])): ?>
-        <div class="mt-5 p-0">
-            <h3>Filter Result</h3>
-            <div class="row col-lg-12 table-responsive m-0 p-0">
-                <table class="table table-striped table-hover table-bordered shadow-sm bg-white">
-                    <thead class="thead-dark">
-                        <tr class="text-center">
-                            <th>Name</th>
-                            <th>Author</th>
-                            <th>Publication</th>
-                            <th>Edition</th>
-                            <th>Class</th>
-                            <th>Semester</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-center">
-                        <?php
-                            $name = mysqli_real_escape_string($con, $_GET['name']);
-                            $author = mysqli_real_escape_string($con, $_GET['author']);
-                            $publication = mysqli_real_escape_string($con, $_GET['publication']);
-                            $edition = mysqli_real_escape_string($con, $_GET['edition']);
-                            $class = mysqli_real_escape_string($con, $_GET['class']);
-                            $sem = isset($_GET['sem']) ? mysqli_real_escape_string($con, $_GET['sem']) : '';
 
-                            $conditions = array();
 
-                            if(!empty($name)){ $conditions[] = "name LIKE '%$name%'"; }
-                            if(!empty($author)){ $conditions[] = "author LIKE '%$author%'"; }
-                            if(!empty($publication)){ $conditions[] = "publication LIKE '%$publication%'"; }
-                            if(!empty($edition)){ $conditions[] = "edition LIKE '%$edition%'"; }
-                            if(!empty($class) && $class != '#'){ $conditions[] = "class = '$class'"; }
-                            if(!empty($sem)){ $conditions[] = "sem = '$sem'"; }
 
-                            $whereClause = count($conditions) > 0 ? "WHERE " . implode(' AND ', $conditions) : "";
-                            
-                            $countQuery = "SELECT COUNT(*) as total FROM `bookdata` $whereClause";
-                            $countResult = mysqli_query($con, $countQuery);
-                            $totalRows = mysqli_fetch_assoc($countResult)['total'];
-                            $totalPages = ceil($totalRows / $limit);
-
-                            $query = "SELECT * FROM `bookdata` $whereClause LIMIT $offset, $limit";
-                            $data = mysqli_query($con, $query) or die(mysqli_error($con));
-                            
-                            if(mysqli_num_rows($data) > 0){
-                                while($row = mysqli_fetch_assoc($data)){
-                                    ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($row['name']);?></td>
-                                        <td><?php echo htmlspecialchars($row['author']);?></td>
-                                        <td><?php echo htmlspecialchars($row['publication']);?></td>
-                                        <td><?php echo htmlspecialchars($row['edition']);?></td>
-                                        <td><?php echo htmlspecialchars($row['class']);?></td>
-                                        <td><?php echo htmlspecialchars($row['sem']);?></td>
-                                    </tr>
-                                    <?php
+        <div id="student-catalog-card" class="card shadow-sm border-0 mb-5">
+            <div class="card-header bg-white d-flex flex-column flex-md-row justify-content-between align-items-md-center py-3">
+                <h5 class="mb-0 text-dark"><i class="fas fa-book"></i> Library Books Catalog</h5>
+                
+                <form class="form-inline m-0 ajax-filter-form" method="get" id="catalogControls">
+                    <div class="d-flex align-items-center mb-2 mb-md-0 mr-md-3">
+                        <label class="mr-2 small font-weight-bold">Show</label>
+                        <select name="limit" class="form-control form-control-sm">
+                            <?php 
+                                $limits = [5, 10, 20, 50, 100];
+                                foreach($limits as $l) {
+                                    echo '<option value="'.$l.'" '.($limit == $l ? 'selected' : '').'>'.$l.'</option>';
                                 }
-                            } else {
-                                ?>
-                                <tr>
-                                    <td colspan="6">Records Not Found</td>
-                                </tr>
-                                <?php
-                            }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-            
-            <?php if($totalPages > 1): ?>
-            <nav class="mt-4">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="<?php echo getPaginationUrl($page - 1, $limit); ?>">Previous</a>
-                    </li>
-                    <?php for($i = 1; $i <= $totalPages; $i++): ?>
-                        <li class="page-item <?php echo ($page == $i) ? 'active' : ''; ?>">
-                            <a class="page-link" href="<?php echo getPaginationUrl($i, $limit); ?>"><?php echo $i; ?></a>
-                        </li>
-                    <?php endfor; ?>
-                    <li class="page-item <?php echo ($page >= $totalPages) ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="<?php echo getPaginationUrl($page + 1, $limit); ?>">Next</a>
-                    </li>
-                </ul>
-            </nav>
-            <?php endif; ?>
-        </div>
-        <?php endif; ?>
-
-        <?php if(isset($_GET['submit'])): ?>
-        <div class="col-lg-12 table-responsive mt-4 p-0">
-            <h3 >Searched books</h3>
-            <table class="table table-striped table-hover table-bordered shadow-sm bg-white col-lg-12">
-                <thead class="thead-dark">
-                    <tr class="text-center">
-                        <th>Name</th>
-                        <th>Author</th>
-                        <th>Publication</th>
-                        <th>Edition</th>
-                    </tr>
-                </thead>
-                <tbody class="text-center">
-                <?php
-                    $search=mysqli_real_escape_string($con, $_GET['search']);
-                    $whereClause="where id like '%$search%' or name like '%$search%' or author like '%$search%' or publication like '%$search%' or edition like '%$search%'";
+                            ?>
+                        </select>
+                        <label class="ml-2 small font-weight-bold">rows</label>
+                    </div>
                     
-                    $countQuery = "SELECT COUNT(*) as total FROM `bookdata` $whereClause";
-                    $countResult = mysqli_query($con, $countQuery);
-                    $totalRows = mysqli_fetch_assoc($countResult)['total'];
-                    $totalPages = ceil($totalRows / $limit);
+                    <div class="input-group input-group-sm shadow-sm">
+                        <input class="form-control border-warning" type="search" name="search" placeholder="Search Books..." aria-label="Search" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                        <div class="input-group-append">
+                            <button class="btn btn-warning text-dark font-weight-bold px-3" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-body p-0">
+            <?php
+            // Combined Filter Logic
+            $conditions = array();
+            $params_arr = array();
 
-                    $sql="Select * from `bookdata` $whereClause LIMIT $offset, $limit";
-                    $result=mysqli_query($con,$sql);
-                    if($result) {
-                        if(mysqli_num_rows($result)>0){
-                            while($row=mysqli_fetch_assoc($result)){
-                                echo '<tr>
-                                <td>'.htmlspecialchars($row['name']).'</td>
-                                <td>'.htmlspecialchars($row['author']).'</td>
-                                <td>'.htmlspecialchars($row['publication']).'</td>
-                                <td>'.htmlspecialchars($row['edition']).'</td>
-                                </tr>';
-                            }
-                        }else{
-                            echo '<tr><td colspan="4" class="text-danger font-weight-bold">Data not found</td></tr>';
-                        }
-                    }
-                ?>
-                </tbody>
-            </table>
+            // 1. Simple Search
+            if (isset($_GET['search']) && !empty(trim($_GET['search']))) {
+                $s = mysqli_real_escape_string($con, $_GET['search']);
+                $conditions[] = "(name LIKE '%$s%' OR author LIKE '%$s%' OR publication LIKE '%$s%' OR edition LIKE '%$s%' OR class LIKE '%$s%')";
+                $params_arr['search'] = $_GET['search'];
+            }
+
+            // 2. Advanced Fields
+            if (isset($_GET['name']) && !empty(trim($_GET['name']))) {
+                $n = mysqli_real_escape_string($con, $_GET['name']);
+                $conditions[] = "name LIKE '%$n%'";
+                $params_arr['name'] = $_GET['name'];
+            }
+            if (isset($_GET['author']) && !empty(trim($_GET['author']))) {
+                $a = mysqli_real_escape_string($con, $_GET['author']);
+                $conditions[] = "author LIKE '%$a%'";
+                $params_arr['author'] = $_GET['author'];
+            }
+            if (isset($_GET['publication']) && !empty(trim($_GET['publication']))) {
+                $p = mysqli_real_escape_string($con, $_GET['publication']);
+                $conditions[] = "publication LIKE '%$p%'";
+                $params_arr['publication'] = $_GET['publication'];
+            }
+            if (isset($_GET['edition']) && !empty(trim($_GET['edition']))) {
+                $e = mysqli_real_escape_string($con, $_GET['edition']);
+                $conditions[] = "edition LIKE '%$e%'";
+                $params_arr['edition'] = $_GET['edition'];
+            }
+            if (isset($_GET['class']) && !empty(trim($_GET['class'])) && $_GET['class'] != '#') {
+                $c = mysqli_real_escape_string($con, $_GET['class']);
+                $conditions[] = "class = '$c'";
+                $params_arr['class'] = $_GET['class'];
+            }
+            if (isset($_GET['sem']) && !empty(trim($_GET['sem']))) {
+                $sem = mysqli_real_escape_string($con, $_GET['sem']);
+                $conditions[] = "sem = '$sem'";
+                $params_arr['sem'] = $_GET['sem'];
+            }
+
+            $searchQuery = count($conditions) > 0 ? " WHERE " . implode(' AND ', $conditions) : "";
+            $searchParam = !empty($params_arr) ? "&" . http_build_query($params_arr) : "";
             
-            <?php if($totalPages > 1): ?>
-            <nav class="mt-4">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="<?php echo getPaginationUrl($page - 1, $limit); ?>">Previous</a>
-                    </li>
-                    <?php for($i = 1; $i <= $totalPages; $i++): ?>
-                        <li class="page-item <?php echo ($page == $i) ? 'active' : ''; ?>">
-                            <a class="page-link" href="<?php echo getPaginationUrl($i, $limit); ?>"><?php echo $i; ?></a>
-                        </li>
-                    <?php endfor; ?>
-                    <li class="page-item <?php echo ($page >= $totalPages) ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="<?php echo getPaginationUrl($page + 1, $limit); ?>">Next</a>
-                    </li>
-                </ul>
-            </nav>
-            <?php endif; ?>
-        </div>
-        <?php endif; ?>
+            $limitParam = "&limit=" . $limit;
+            
+            // Get total rows
+            $total_query = mysqli_query($con, "SELECT COUNT(*) as total FROM `bookdata`" . $searchQuery);
+            $total_row = mysqli_fetch_assoc($total_query);
+            $total_pages = ceil($total_row['total'] / $limit);
 
-        <?php if(!isset($_GET['sbmt']) && !isset($_GET['submit'])): ?>
-        <div class="mt-4 p-0">
-            <div class="col-lg-12 table-responsive m-0 p-0">
-                <h3 >Your books</h3>
-                <br>
-                <table class="table table-striped table-hover table-bordered shadow-sm bg-white">
+            $q = "SELECT * FROM `bookdata` " . $searchQuery . " LIMIT $limit OFFSET $offset";
+            $query = mysqli_query($con, $q);
+            ?>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered shadow-sm bg-white mb-0">
                     <thead class="thead-dark">
                         <tr class="text-center">
                             <th> Name </th>
@@ -328,54 +233,135 @@ function getPaginationUrl($pageNum, $limit) {
                     </thead>
                     <tbody class="text-center">
                     <?php
-                        $countQuery = "SELECT COUNT(*) as total FROM `bookdata`";
-                        $countResult = mysqli_query($con, $countQuery);
-                        $totalRows = mysqli_fetch_assoc($countResult)['total'];
-                        $totalPages = ceil($totalRows / $limit);
-
-                        $q = "select * from bookdata LIMIT $offset, $limit";
-                        $query = mysqli_query($con, $q);
                         if(mysqli_num_rows($query) > 0) {
                             while($res = mysqli_fetch_array($query)){
                             ?>
                             <tr>
-                                <td> <?php echo htmlspecialchars($res['name']) ?> </td>
-                                <td> <?php echo htmlspecialchars($res['author']) ?> </td>
-                                <td> <?php echo htmlspecialchars($res['publication']) ?> </td>
-                                <td> <?php echo htmlspecialchars($res['edition']) ?> </td>
-                                <td> <?php echo htmlspecialchars($res['class']) ?> </td>
-                                <td> <?php echo htmlspecialchars($res['sem']) ?> </td>
+                                <td class="align-middle"> <?php echo htmlspecialchars($res['name']) ?> </td>
+                                <td class="align-middle"> <?php echo htmlspecialchars($res['author']) ?> </td>
+                                <td class="align-middle"> <?php echo htmlspecialchars($res['publication']) ?> </td>
+                                <td class="align-middle"> <?php echo htmlspecialchars($res['edition']) ?> </td>
+                                <td class="align-middle"> <?php echo htmlspecialchars($res['class']) ?> </td>
+                                <td class="align-middle"> <?php echo htmlspecialchars($res['sem']) ?> </td>
                             </tr>
                             <?php
                             }
                         } else {
-                            echo '<tr><td colspan="6">No books found in the library.</td></tr>';
+                            echo '<tr><td colspan="6" class="text-center text-muted py-4">No books found matching your search.</td></tr>';
                         }
                     ?>
                     </tbody>
                 </table>
-                
-                <?php if($totalPages > 1): ?>
-                <nav class="mt-4">
-                    <ul class="pagination justify-content-center">
+            </div>
+
+            </div>
+            <?php if($total_pages > 1): ?>
+            <div class="card-footer bg-white py-3 d-flex justify-content-center" id="student-pagination">
+                <nav aria-label="Student catalog pagination">
+                    <ul class="pagination mb-0 shadow-sm">
                         <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
-                            <a class="page-link" href="<?php echo getPaginationUrl($page - 1, $limit); ?>">Previous</a>
+                            <a class="page-link" href="<?php echo ($page <= 1) ? '#' : '?page='.($page - 1).$searchParam.$limitParam; ?>">Previous</a>
                         </li>
-                        <?php for($i = 1; $i <= $totalPages; $i++): ?>
+                        <?php for($i = 1; $i <= $total_pages; $i++): ?>
                             <li class="page-item <?php echo ($page == $i) ? 'active' : ''; ?>">
-                                <a class="page-link" href="<?php echo getPaginationUrl($i, $limit); ?>"><?php echo $i; ?></a>
+                                <a class="page-link" href="?page=<?php echo $i.$searchParam.$limitParam; ?>"><?php echo $i; ?></a>
                             </li>
                         <?php endfor; ?>
-                        <li class="page-item <?php echo ($page >= $totalPages) ? 'disabled' : ''; ?>">
-                            <a class="page-link" href="<?php echo getPaginationUrl($page + 1, $limit); ?>">Next</a>
+                        <li class="page-item <?php echo ($page >= $total_pages) ? 'disabled' : ''; ?>">
+                            <a class="page-link" href="<?php echo ($page >= $total_pages) ? '#' : '?page='.($page + 1).$searchParam.$limitParam; ?>">Next</a>
                         </li>
                     </ul>
                 </nav>
-                <?php endif; ?>
             </div>
+            <?php endif; ?>
         </div>
-        <?php endif; ?>
+        
+
     </div>
-    <br><br>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const updateTable = (targetId, url) => {
+                const card = document.getElementById(targetId);
+                if (!card) return;
+                
+                const tbody = card.querySelector('tbody');
+                const paginationId = 'student-pagination';
+                const pagination = document.getElementById(paginationId);
+                
+                if (tbody) tbody.style.opacity = '0.5';
+                
+                fetch(url)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        
+                        const newCard = doc.getElementById(targetId);
+                        if (newCard) {
+                            const newTbody = newCard.querySelector('tbody');
+                            const newPagination = doc.getElementById(paginationId);
+                            
+                            if (newTbody && tbody) {
+                                tbody.innerHTML = newTbody.innerHTML;
+                                tbody.style.opacity = '1';
+                            }
+                            if (newPagination && pagination) {
+                                pagination.innerHTML = newPagination.innerHTML;
+                                pagination.style.display = newPagination.style.display;
+                            }
+                        }
+                        window.history.pushState({path: url}, '', url);
+                    })
+                    .catch(err => {
+                        console.error('AJAX Update failed:', err);
+                        if (tbody) tbody.style.opacity = '1';
+                    });
+            };
+
+            // 1. Pagination Clicks
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('.page-link');
+                if (!link) return;
+                e.preventDefault();
+                const url = link.getAttribute('href');
+                if (!url || url === '#') return;
+                updateTable('student-catalog-card', url);
+            });
+
+            // 2. Filter/Limit Changes
+            document.addEventListener('change', function(e) {
+                const form = e.target.closest('.ajax-filter-form');
+                if (!form) return;
+                const formData = new FormData(form);
+                const params = new URLSearchParams(window.location.search);
+                for (const [key, value] of formData.entries()) {
+                    if (value !== '') params.set(key, value);
+                    else params.delete(key);
+                }
+                const url = window.location.pathname + '?' + params.toString();
+                updateTable('student-catalog-card', url);
+            });
+
+            // 3. Search Submits
+            document.addEventListener('submit', function(e) {
+                const form = e.target.closest('.ajax-filter-form');
+                if (!form) return;
+                e.preventDefault();
+                const formData = new FormData(form);
+                const params = new URLSearchParams(window.location.search);
+                for (const [key, value] of formData.entries()) {
+                    if (value !== '') params.set(key, value);
+                    else params.delete(key);
+                }
+                params.delete('page');
+                const url = window.location.pathname + '?' + params.toString();
+                updateTable('student-catalog-card', url);
+            });
+        });
+    </script>
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -8,6 +8,7 @@ if(isset($_POST['submit'])){
   // Hardcoded Admin Credentials
   if($user === 'admin' && $password === 'admin123'){
     $_SESSION['admin_logged_in'] = true;
+    $_SESSION['username'] = 'Admin';
     header('location:admin_dashboard.php');
     exit();
   }
@@ -28,6 +29,7 @@ if(isset($_POST['submit'])){
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>Admin Login</title>
   </head>
   <body>
@@ -49,6 +51,7 @@ if(isset($_POST['submit'])){
       </div>
   </div>
 </section>
+</div>
 
     <!-- Optional JavaScript -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

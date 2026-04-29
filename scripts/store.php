@@ -1,5 +1,5 @@
 <?php
-include 'conn.php';
+include '../includes/db.php';
 
 if(isset($_POST['done'])){
     $id = $_GET['id'];
@@ -15,7 +15,7 @@ if(isset($_POST['done'])){
     $q = "   INSERT INTO `bookdata`(`id`, `name`, `author`, `publication`, `edition`, `class`, `sem`) VALUES ('$id','$name','$author','$publication','$edition','$class','$sem')   ";
     $query = mysqli_query($con, $q);
 
-    header('location:librarian.php');
+    header('location:../screens/librarian.php');
 
 }
 ?>

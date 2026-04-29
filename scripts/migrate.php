@@ -1,5 +1,5 @@
 <?php
-include 'conn.php';
+include '../includes/db.php';
 
 $sql = "ALTER TABLE `books` ADD COLUMN `sent_by` VARCHAR(255) DEFAULT NULL";
 if (mysqli_query($con, $sql)) {

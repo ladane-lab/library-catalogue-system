@@ -66,37 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body class="bg-light">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <a class="navbar-brand" href="<?php echo ($role === 'faculty') ? 'staff.php' : (($role === 'librarian') ? 'librarian.php' : 'home.php'); ?>">
-            <h6 class="m-0"><b style="color: white;">WELCOME TO LIBRARY <span style="color: rgb(236, 134, 17)">ZONE</span></b></h6>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link text-white font-weight-bold" href="<?php echo ($role === 'faculty') ? 'staff.php' : (($role === 'librarian') ? 'librarian.php' : 'home.php'); ?>">
-                        <i class="fas fa-arrow-left"></i> Back to Dashboard
-                    </a>
-                </li>
-            </ul>
-            
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
-                        <i class="fas fa-user-circle"></i> Welcome, <?php echo htmlspecialchars($username); ?>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="change_password.php">Change Password</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-danger" href="../scripts/logout.php">Logout</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <?php include '../includes/navbar.php'; ?>
 
     <!-- Change Password Form -->
     <div class="container mt-5">

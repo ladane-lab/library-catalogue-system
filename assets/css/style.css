@@ -6,7 +6,7 @@
 .header {
   min-height: 100vh;
   width: 100%;
-  background-image: linear-gradient(rgba(184, 237, 202, 0.333), rgba(28, 146, 189, 0.747)), url(images/catalogue.jpg);
+  background-image: linear-gradient(rgba(184, 237, 202, 0.333), rgba(28, 146, 189, 0.747)), url(../img/catalogue.jpg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 700px;

@@ -3,7 +3,7 @@ session_start();
 include '../includes/db.php';
 
 if (!isset($_SESSION['username'])) {
-    header("Location: ../sample.php");
+    header("Location: ../screens/sample.php");
     exit();
 }
 ?>
@@ -25,36 +25,7 @@ if (!isset($_SESSION['username'])) {
 </head>
 
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <a class="navbar-brand" href="../librarian.php">
-            <h6 class="m-0"><b style="color: white;">WELCOME TO LIBRARY <span style="color: rgb(236, 134, 17)">ZONE</span></b></h6>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link text-white font-weight-bold" href="../librarian.php">Dashboard</a>
-                </li>
-            </ul>
-
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-user-circle"></i> Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="../change_password.php">Change Password</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-danger" href="../logout.php">Logout</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <?php include '../includes/navbar.php'; ?>
 
     <div class="container mt-5">
         <div class="row justify-content-center">
@@ -124,7 +95,7 @@ if (!isset($_SESSION['username'])) {
                 </div>
                 
                 <div class="mt-4 text-center">
-                    <a href="../librarian.php" class="text-muted"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+                    <a href="../screens/librarian.php" class="text-muted"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@ include '../includes/db.php';
 
 // Enforce login
 if (!isset($_SESSION['username'])) {
-    header("Location: sample.php");
+    header("Location: ../screens/sample.php");
     exit();
 }
 
@@ -35,7 +35,7 @@ $fetch_result = mysqli_query($con, $fetch_query);
 $book = mysqli_fetch_assoc($fetch_result);
 
 if (!$book) {
-    header("Location: librarian.php");
+    header("Location: ../screens/librarian.php");
     exit();
 }
 ?>
@@ -55,6 +55,7 @@ if (!$book) {
     <title>Update Book</title>
 </head>
 <body class="bg-light">
+<?php include '../includes/navbar.php'; ?>
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -122,7 +123,7 @@ if (!$book) {
 
                         <hr class="mt-4">
                         <div class="d-flex justify-content-between">
-                            <a href="librarian.php" class="btn btn-secondary font-weight-bold px-4"><i class="fas fa-arrow-left"></i> Cancel</a>
+                            <a href="../screens/librarian.php" class="btn btn-secondary font-weight-bold px-4"><i class="fas fa-arrow-left"></i> Cancel</a>
                             <button class="btn btn-success font-weight-bold px-4" type="submit" name="submit"><i class="fas fa-save"></i> Update Book</button>
                         </div>
                     </form>

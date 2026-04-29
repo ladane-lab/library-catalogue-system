@@ -3,7 +3,7 @@ session_start();
 include '../includes/db.php';
 
 if (!isset($_SESSION['username'])) {
-    header("Location: ../sample.php");
+    header("Location: ../screens/sample.php");
     exit();
 }
 
@@ -39,14 +39,14 @@ if (isset($_POST["import"])) {
         fclose($file);
         
         // Redirect back with success message parameter
-        header("Location: ../librarian.php?import_success=" . $count);
+        header("Location: ../screens/librarian.php?import_success=" . $count);
         exit();
     } else {
-        header("Location: ../librarian.php?import_error=empty");
+        header("Location: ../screens/librarian.php?import_error=empty");
         exit();
     }
 } else {
-    header("Location: ../librarian.php");
+    header("Location: ../screens/librarian.php");
     exit();
 }
 ?>

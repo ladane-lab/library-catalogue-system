@@ -36,10 +36,10 @@ if (!isset($_SESSION['username'])) {
                         <?php echo count($_SESSION['selected_books'] ?? []); ?> selected
                     </span>
                 </h5>
-                <form class="form-inline m-0" method="get" id="catalogControls">
+                <form class="form-inline m-0 ajax-filter-form" method="get" id="catalogControls">
                     <div class="d-flex align-items-center mb-2 mb-md-0 mr-md-3">
                         <label class="mr-2 small font-weight-bold">Show</label>
-                        <select name="limit" class="form-control form-control-sm" onchange="this.form.submit()">
+                        <select name="limit" class="form-control form-control-sm">
                             <?php 
                                 $limits = [5, 10, 20, 50, 100];
                                 $current_limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 5;
@@ -177,8 +177,20 @@ if (!isset($_SESSION['username'])) {
             <div class="card-header bg-success text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center py-3">
                 <h5 class="mb-3 mb-md-0"><i class="fas fa-check-circle"></i> Sent Books History</h5>
                 
-                <form class="form-inline m-0" method="get">
-                    <!-- Preserve table 1 state if needed, but usually we just want this table's search -->
+                <form class="form-inline m-0 ajax-filter-form" method="get" id="historyControls">
+                    <div class="d-flex align-items-center mb-2 mb-md-0 mr-md-3">
+                        <label class="mr-2 small font-weight-bold">Show</label>
+                        <select name="limit2" class="form-control form-control-sm">
+                            <?php 
+                                $limits = [5, 10, 20, 50, 100];
+                                $current_limit2 = isset($_GET['limit2']) ? (int)$_GET['limit2'] : 5;
+                                foreach($limits as $l) {
+                                    echo '<option value="'.$l.'" '.($current_limit2 == $l ? 'selected' : '').'>'.$l.'</option>';
+                                }
+                            ?>
+                        </select>
+                        <label class="ml-2 small font-weight-bold">rows</label>
+                    </div>
                     <div class="input-group input-group-sm shadow-sm">
                         <input class="form-control border-light" type="search" name="search2" placeholder="Search history..." aria-label="Search History" value="<?php echo isset($_GET['search2']) ? htmlspecialchars($_GET['search2']) : ''; ?>">
                         <div class="input-group-append">
@@ -205,9 +217,10 @@ if (!isset($_SESSION['username'])) {
                         <tbody id="sent-books-tbody">
                         <?php
                             // Pagination and Search for Sent Books
-                            $limit2 = 5;
+                            $limit2 = isset($_GET['limit2']) && is_numeric($_GET['limit2']) ? (int)$_GET['limit2'] : 5;
                             $page2 = isset($_GET['p2']) && is_numeric($_GET['p2']) ? (int)$_GET['p2'] : 1;
                             $offset2 = ($page2 - 1) * $limit2;
+                            $limitParam2 = "&limit2=" . $limit2;
 
                             $current_staff = mysqli_real_escape_string($con, $_SESSION['username']);
                             $where_clause = " WHERE sent_by = '$current_staff' ";
@@ -218,6 +231,7 @@ if (!isset($_SESSION['username'])) {
                                 $where_clause .= " AND (isbn LIKE '%$search2%' OR author LIKE '%$search2%' OR title LIKE '%$search2%' OR edition LIKE '%$search2%') ";
                                 $searchParam2 = "&search2=" . urlencode($_GET['search2']);
                             }
+                            $params2 = $searchParam2 . $limitParam2;
 
                             $total_query2 = mysqli_query($con, "SELECT COUNT(*) as total FROM `books`" . $where_clause);
                             $total_row2 = mysqli_fetch_assoc($total_query2);
@@ -253,15 +267,15 @@ if (!isset($_SESSION['username'])) {
                     <nav aria-label="Sent books pagination">
                         <ul class="pagination mb-0 shadow-sm">
                             <li class="page-item <?php echo ($page2 <= 1) ? 'disabled' : ''; ?>">
-                                <a class="page-link" href="<?php echo ($page2 <= 1) ? '#' : '?p2='.($page2 - 1).$searchParam2; ?>">Previous</a>
+                                <a class="page-link" href="<?php echo ($page2 <= 1) ? '#' : '?p2='.($page2 - 1).$params2; ?>">Previous</a>
                             </li>
                             <?php for($j = 1; $j <= $total_pages2; $j++): ?>
                                 <li class="page-item <?php echo ($page2 == $j) ? 'active' : ''; ?>">
-                                    <a class="page-link" href="?p2=<?php echo $j.$searchParam2; ?>"><?php echo $j; ?></a>
+                                    <a class="page-link" href="?p2=<?php echo $j.$params2; ?>"><?php echo $j; ?></a>
                                 </li>
                             <?php endfor; ?>
                             <li class="page-item <?php echo ($page2 >= $total_pages2) ? 'disabled' : ''; ?>">
-                                <a class="page-link" href="<?php echo ($page2 >= $total_pages2) ? '#' : '?p2='.($page2 + 1).$searchParam2; ?>">Next</a>
+                                <a class="page-link" href="<?php echo ($page2 >= $total_pages2) ? '#' : '?p2='.($page2 + 1).$params2; ?>">Next</a>
                             </li>
                         </ul>
                     </nav>
@@ -305,98 +319,96 @@ if (!isset($_SESSION['username'])) {
             }
         });
 
-        // AJAX Pagination for Staff Catalog Table
+        // Global Dashboard AJAX Handler
         document.addEventListener('DOMContentLoaded', function() {
-            const tableCard = document.getElementById('staff-catalog-card');
-            
-            if(tableCard) {
-                tableCard.addEventListener('click', function(e) {
-                    if (e.target.tagName === 'A' && e.target.classList.contains('page-link')) {
-                        e.preventDefault();
-                        const url = e.target.getAttribute('href');
+            const updateTable = (targetId, url) => {
+                const card = document.getElementById(targetId);
+                if (!card) return;
+                
+                const tbody = card.querySelector('tbody');
+                const paginationId = card.querySelector('[id$="-pagination"]')?.id || (targetId === 'staff-catalog-card' ? 'staff-pagination' : 'sent-pagination');
+                const pagination = document.getElementById(paginationId);
+                
+                if (tbody) tbody.style.opacity = '0.5';
+                
+                fetch(url)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
                         
-                        if (url && url !== '#') {
-                            const tbody = document.getElementById('staff-catalog-tbody');
-                            const pagination = document.getElementById('staff-pagination');
-                            const badge = document.getElementById('selected-count');
+                        const newCard = doc.getElementById(targetId);
+                        if (newCard) {
+                            const newTbody = newCard.querySelector('tbody');
+                            const newPagination = doc.getElementById(paginationId);
+                            const newBadge = doc.getElementById('selected-count');
                             
-                            tbody.style.opacity = '0.5'; // Visual loading feedback
-                            
-                            fetch(url)
-                                .then(response => response.text())
-                                .then(html => {
-                                    const parser = new DOMParser();
-                                    const doc = parser.parseFromString(html, 'text/html');
-                                    
-                                    const newTbody = doc.getElementById('staff-catalog-tbody');
-                                    const newPagination = doc.getElementById('staff-pagination');
-                                    const newBadge = doc.getElementById('selected-count');
-                                    
-                                    if (newTbody) {
-                                        document.getElementById('staff-catalog-tbody').innerHTML = newTbody.innerHTML;
-                                        document.getElementById('staff-catalog-tbody').style.opacity = '1';
-                                    }
-                                    if (newPagination && document.getElementById('staff-pagination')) {
-                                        document.getElementById('staff-pagination').innerHTML = newPagination.innerHTML;
-                                    }
-                                    if (newBadge && badge) {
-                                        badge.innerHTML = newBadge.innerHTML;
-                                        badge.style.display = newBadge.style.display;
-                                    }
-                                    
-                                    // Update URL without full page reload
-                                    window.history.pushState({path: url}, '', url);
-                                })
-                                .catch(err => {
-                                    console.error('Error fetching paginated data:', err);
-                                    tbody.style.opacity = '1';
-                                });
+                            if (newTbody && tbody) {
+                                tbody.innerHTML = newTbody.innerHTML;
+                                tbody.style.opacity = '1';
+                            }
+                            if (newPagination && pagination) {
+                                pagination.innerHTML = newPagination.innerHTML;
+                                pagination.style.display = newPagination.style.display;
+                            }
+                            if (newBadge && document.getElementById('selected-count')) {
+                                document.getElementById('selected-count').innerHTML = newBadge.innerHTML;
+                                document.getElementById('selected-count').style.display = newBadge.style.display;
+                            }
                         }
-                    }
-                });
-            }
+                        window.history.pushState({path: url}, '', url);
+                    })
+                    .catch(err => {
+                        console.error('AJAX Update failed:', err);
+                        if (tbody) tbody.style.opacity = '1';
+                    });
+            };
 
-            // AJAX Pagination for Sent Books Table
-            const sentBooksCard = document.getElementById('sent-books-card');
-            if(sentBooksCard) {
-                sentBooksCard.addEventListener('click', function(e) {
-                    if (e.target.tagName === 'A' && e.target.classList.contains('page-link')) {
-                        e.preventDefault();
-                        const url = e.target.getAttribute('href');
-                        
-                        if (url && url !== '#') {
-                            const tbody = document.getElementById('sent-books-tbody');
-                            const pagination = document.getElementById('sent-pagination');
-                            
-                            tbody.style.opacity = '0.5';
-                            
-                            fetch(url)
-                                .then(response => response.text())
-                                .then(html => {
-                                    const parser = new DOMParser();
-                                    const doc = parser.parseFromString(html, 'text/html');
-                                    
-                                    const newTbody = doc.getElementById('sent-books-tbody');
-                                    const newPagination = doc.getElementById('sent-pagination');
-                                    
-                                    if (newTbody) {
-                                        document.getElementById('sent-books-tbody').innerHTML = newTbody.innerHTML;
-                                        document.getElementById('sent-books-tbody').style.opacity = '1';
-                                    }
-                                    if (newPagination && document.getElementById('sent-pagination')) {
-                                        document.getElementById('sent-pagination').innerHTML = newPagination.innerHTML;
-                                    }
-                                    
-                                    window.history.pushState({path: url}, '', url);
-                                })
-                                .catch(err => {
-                                    console.error('Error fetching paginated data:', err);
-                                    tbody.style.opacity = '1';
-                                });
-                        }
-                    }
-                });
-            }
+            // 1. Pagination Clicks
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('.page-link');
+                if (!link) return;
+                e.preventDefault();
+                const url = link.getAttribute('href');
+                if (!url || url === '#') return;
+                const card = link.closest('.card');
+                if (card && card.id) updateTable(card.id, url);
+            });
+
+            // 2. Filter/Limit Changes
+            document.addEventListener('change', function(e) {
+                const form = e.target.closest('.ajax-filter-form');
+                if (!form) return;
+                const card = form.closest('.card');
+                if (!card || !card.id) return;
+                const formData = new FormData(form);
+                const params = new URLSearchParams(window.location.search);
+                for (const [key, value] of formData.entries()) {
+                    if (value !== '') params.set(key, value);
+                    else params.delete(key);
+                }
+                const url = window.location.pathname + '?' + params.toString();
+                updateTable(card.id, url);
+            });
+
+            // 3. Search Submits
+            document.addEventListener('submit', function(e) {
+                const form = e.target.closest('.ajax-filter-form');
+                if (!form) return;
+                e.preventDefault();
+                const card = form.closest('.card');
+                if (!card || !card.id) return;
+                const formData = new FormData(form);
+                const params = new URLSearchParams(window.location.search);
+                for (const [key, value] of formData.entries()) {
+                    if (value !== '') params.set(key, value);
+                    else params.delete(key);
+                }
+                const tableNum = card.id.includes('staff') ? 'page' : 'p2';
+                params.delete(tableNum);
+                const url = window.location.pathname + '?' + params.toString();
+                updateTable(card.id, url);
+            });
         });
     </script>
     

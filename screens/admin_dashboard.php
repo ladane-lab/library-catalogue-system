@@ -56,21 +56,11 @@ if(isset($_GET['logout'])){
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Admin Dashboard - Library Zone</title>
 </head>
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <div class="container">
-            <a class="navbar-brand font-weight-bold" href="#">
-                LIBRARY <span style="color: rgb(236, 134, 17);">ZONE</span> - Admin Panel
-            </a>
-            <ul class="navbar-nav ml-auto font-weight-bold">
-                <li class="nav-item">
-                    <a class="nav-link btn btn-danger text-white px-3" href="admin_dashboard.php?logout=true">Logout</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <?php include '../includes/navbar.php'; ?>
 
     <div class="container mt-5">
         <h2 class="mb-4">Pending Registrations</h2>
@@ -114,5 +104,9 @@ if(isset($_GET['logout'])){
             </div>
         </div>
     </div>
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
