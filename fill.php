@@ -17,7 +17,7 @@ if(isset($_POST['submit'])){
    $q = "INSERT INTO `new`(`isbn`, `author`, `title`, `edn`, `price`, `edition`, `qty`, `yop`) VALUES ('$isbn', '$author','$title','$edn','$price','$edition','$qty','$yop')";
 
     $query = mysqli_query($con, $q);
-    header('location:fill.html');
+    header('location:filldata.php');
 
 }
 ?>

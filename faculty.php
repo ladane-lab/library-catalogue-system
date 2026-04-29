@@ -1,24 +1,24 @@
 <?php
+session_start();
 include 'conn.php';
 
 if(isset($_POST['username'])){
   $user = $_POST['username'];
   $password = $_POST['password'];
 
-  $sql=" SELECT * FROM `loginform` WHERE user='".$user."' AND  password='".$password."'
-  limit 1 ";
+  $sql=" SELECT * FROM `loginform` WHERE user='".$user."' AND  password='".$password."' AND role='faculty' limit 1 ";
   
   $result=mysqli_query($con,$sql);
   
   if(mysqli_num_rows($result)==1){
-    
+    $_SESSION['username'] = $user;
+    $_SESSION['role'] = 'faculty';
     header('location:staff.php');
     exit();
 
   }
   else{
-    echo "You Have Entered Incorrect Username/Password";
-    exit();
+    $login_error = "You Have Entered Incorrect Username/Password";
   }
 }
 
@@ -39,36 +39,21 @@ if(isset($_POST['username'])){
   </head>
   <body>
     <div class="header">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    
-    
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="right-side">
-    <a class="navbar-brand mx-auto" href="index.php">Home |</a>
-      <a class="navbar-brand mx-auto" href="student.php">Student |</a>
-      <a class="navbar-brand mx-auto" href="sample2.php">Staff |</a>
-      <a class="navbar-brand mx-auto" href="sample.php">Librarian</a>
-    </ul>
- 
-    
-  </div>
-  <h6><b style="color: white ">WELCOME TO LIBRARY   </br> <b style="color: rgb(236, 134, 17)"> ZONE</b></h6>
-   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  
-</nav>
+    <?php include 'navbar.php'; ?>
 <section class="header">
   <div class="register-wrapper">
       <div class="register-block">
         <h3 class="register-title">Log in Into Library</h3>
-
+        <?php if(isset($login_error)): ?>
+            <div class="alert alert-danger p-2 mb-3" style="font-size: 14px;"><?php echo $login_error; ?></div>
+        <?php endif; ?>
         <form method="post" action="#">
           <input type="text" name="username" placeholder="Enter Your Username" />
           <input type="password" name="password" placeholder=" Enter  Your Password" />
-          <input type="submit" name="submit" placeholder="Log in" />
-
+          <input type="submit" name="submit" value="Log in" />
+          <p style="text-align: center; margin-top: 20px; font-size: 14px;">
+              <a href="faculty_signup.php" style="color: #666; font-size: 14px; padding-top: 0; text-shadow: none; font-family: Arial, sans-serif;">New Faculty? Sign Up here</a>
+          </p>
         </form>
 
       </div>

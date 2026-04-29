@@ -13,13 +13,10 @@
   background-size: cover;
   position: relative;
 }
-nav {
 
+nav {
   padding: 2% 6%;
   padding-top: 0%;
-  justify-content: center;
-  align-items: right;
-
 }
 
 
@@ -57,6 +54,7 @@ body {
   background-color: rgb(76, 179, 211);
   position: relative;
 }
+
 .topnav h6 {
   color: white;
   padding-top: 20px;
@@ -84,6 +82,7 @@ body {
   right: 0;
   top: 0;
 }
+
 .topnav {
   height: 65px;
   width: 100%;
@@ -101,11 +100,12 @@ body {
 
 .topnav LI {
   list-style: none;
-    display: inline-block;
-    padding: 8px 12px;
-    position: relative;
+  display: inline-block;
+  padding: 8px 12px;
+  position: relative;
 }
-.right-side ul{
+
+.right-side ul {
   display: inline-block;
 
 }
@@ -116,6 +116,7 @@ body {
   background-color: transparent;
   color: white;
 }
+
 .text-box {
   width: 100%;
   color: #fff;
@@ -125,13 +126,15 @@ body {
   text-align: center;
   font-family: 'Roboto', sans-serif;
 }
-.text-box h1{
+
+.text-box h1 {
   font-size: 38px;
   font-weight: 400;
   color: #fff;
   line-height: normal;
   padding-bottom: 5px;
 }
+
 .text-box p {
   margin: 20px 10 30px;
   color: yellow;
@@ -140,7 +143,7 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-.register-wrapper{
+.register-wrapper {
   position: relative;
   z-index: 3;
   padding: 100px;
@@ -148,10 +151,12 @@ body {
   color: #999999;
 
 }
+
 .register-wrapper * {
   box-sizing: border-box;
 
 }
+
 .register-wrapper form input {
   display: inline-block;
   width: 100%;
@@ -166,16 +171,18 @@ body {
   -webkit-animation: all 0.3s ease;
   transition: all 0.3s ease;
 }
+
 .register-wrapper form input:not(:last-child) {
-  margin-bottom:20px;
+  margin-bottom: 20px;
 
 }
+
 .register-wrapper form input[type="email"]:focus,
 .register-wrapper form input[type="email"]:active,
-.register-wrapper form input[type="password"]:focus
-.register-wrapper form input[type="password"]:active{
+.register-wrapper form input[type="password"]:focus .register-wrapper form input[type="password"]:active {
   border-color: #cccccc;
 }
+
 .register-wrapper form input[type="submit"] {
   position: relative;
   z-index: 1;
@@ -184,14 +191,14 @@ body {
   font-size: 1rem;
   background-color: #f2395a;
   background-size: 100%,
-  rgba(0, 0, 0, 0) 75%;
+    rgba(0, 0, 0, 0) 75%;
   background-image: linear-gradient(45deg,
-  rgba(255,255, 255, 0.15) 25%, rgba(0, 0, 0, 0) 25%,
-  rgba(0, 0, 0, 0) 50%,
-  rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255,0.15) 75%, rgba(0, 0, 0, 0) 75%,
-  rgba(0, 0, 0, 0));
+      rgba(255, 255, 255, 0.15) 25%, rgba(0, 0, 0, 0) 25%,
+      rgba(0, 0, 0, 0) 50%,
+      rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, rgba(0, 0, 0, 0) 75%,
+      rgba(0, 0, 0, 0));
   background-size: 20px 20px, 100% 100%;
-  border : 1px solid #f02146;
+  border: 1px solid #f02146;
   border: bottom width 3px;
   color: white;
   outline: none;
@@ -199,9 +206,11 @@ body {
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+
 .register-wrapper form input[type="submit"]:hover {
   background-size: 40px 40px;
 }
+
 .register-title {
   font-size: 1.5em;
   padding-bottom: 30px;
@@ -209,6 +218,7 @@ body {
   border-bottom: 1px dashed #e6e6e6;
 
 }
+
 .register-block {
   position: relative;
   display: block;
@@ -221,6 +231,7 @@ body {
   border-radius: 5px;
 
 }
+
 .register-block:before,
 .register-block:after {
   position: absolute;
@@ -241,24 +252,26 @@ body {
   transition: all 0.3s ease;
 
 }
-.register-block:hover:before{
+
+.register-block:hover:before {
   z-index: -1;
-  -webkit-transform:scale(0.96) translate (0, 16px);
+  -webkit-transform: scale(0.96) translate (0, 16px);
   transform: scale(0.96) translate(0, 16px);
 
 }
-.register-block:hover:after{
+
+.register-block:hover:after {
   z-index: -2;
   -webkit-transform: scale(0.92) translate (0, 32px);
   transform: scale(0.92) translate(0, 32px);
 
 }
-h1, a{
-  font-family:Verdana;
+
+h1 {
+  font-family: Verdana;
   color: #fff;
   font-size: 50px;
   text-decoration: none;
   text-shadow: 2px 2px 3px rgb(58, 74, 75);
   padding-top: 35px;
 }
-

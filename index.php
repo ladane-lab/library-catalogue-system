@@ -12,34 +12,15 @@
   </head>
   <body>
     <div class="header">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    
-    
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="right-side">
-    <a class="navbar-brand mx-auto" href="index.php">Home |</a>
-      <a class="navbar-brand mx-auto" href="student.php">Student |</a>
-      <a class="navbar-brand mx-auto" href="sample2.php">Staff |</a>
-      <a class="navbar-brand mx-auto" href="sample.php">Librarian</a>
-    </ul>
- 
-    
-  </div>
-  <h6><b style="color: white ">WELCOME TO LIBRARY   </br> <b style="color: rgb(236, 134, 17)"> ZONE</b></h6>
-   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  
-</nav>
+    <?php include 'navbar.php'; ?>
 <div class="text-box">
                 <h1>WELCOME TO LIBRARY <b style="color: rgb(236, 134, 17)"> ZONE</b></h1>
                 <h3>LIBRARY TIMINGS</h3>
 
-                <p>Library Timings: 10.00 a.m. to 5.30 p.m</br>
-                    Issue-Receive timing 10.30 a.m. to 4.00 p.m</b>
-                    Break 12.30 p.m. to 1.00 p.m</b>
-                    </b>
+                <p>
+                    <strong>Library Timings:</strong> 10:00 a.m. to 5:30 p.m<br>
+                    <strong>Issue/Receive Timing:</strong> 10:30 a.m. to 4:00 p.m<br>
+                    <strong>Break:</strong> 12:30 p.m. to 1:00 p.m
                 </p>
             </div>
     </div>
